@@ -38,7 +38,7 @@ function render() {
   });
 }
 
-function createEvent() {
+function addEvent() {
   const name = document.getElementById("name").value;
   if (!name) return;
 

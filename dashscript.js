@@ -30,7 +30,7 @@ function render() {
     const li = document.createElement("li");
 
     li.innerHTML = `
-      ${event}
+      <span id="event-${i}">${event}</span>
       <button onclick="editEvent(${i})">✏️</button>
       <button onclick="deleteEvent(${i})">❌</button>
     `;
@@ -52,20 +52,25 @@ function addEvent() {
 }
 
 function editEvent(index) {
-  const currentName = events[index];
+  const span = document.getElementById(`event-${index}`);
 
-  const newName = prompt(
-    "Update event name:",
-    currentName
-  );
+  span.innerHTML = `
+    <input
+      id="edit-${index}"
+      value="${events[index]}"
+    />
+    <button onclick="saveEdit(${index})">Save</button>
+    <button onclick="render()">Cancel</button>
+  `;
+}
 
-  // User pressed Cancel
-  if (newName === null) return;
+function saveEdit(index) {
+  const input = document.getElementById(`edit-${index}`);
+  const newName = input.value.trim();
 
-  // Empty name not allowed
-  if (newName.trim() === "") return;
+  if (!newName) return;
 
-  events[index] = newName.trim();
+  events[index] = newName;
 
   saveDB();
   render();

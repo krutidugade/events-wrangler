@@ -31,7 +31,8 @@ function render() {
 
     li.innerHTML = `
       ${event}
-      <button onclick="deleteEvent(${i})">X</button>
+      <button onclick="editEvent(${i})">✏️</button>
+      <button onclick="deleteEvent(${i})">❌</button>
     `;
 
     list.appendChild(li);
@@ -48,6 +49,26 @@ function addEvent() {
   render();
 
   document.getElementById("name").value = "";
+}
+
+function editEvent(index) {
+  const currentName = events[index];
+
+  const newName = prompt(
+    "Update event name:",
+    currentName
+  );
+
+  // User pressed Cancel
+  if (newName === null) return;
+
+  // Empty name not allowed
+  if (newName.trim() === "") return;
+
+  events[index] = newName.trim();
+
+  saveDB();
+  render();
 }
 
 function deleteEvent(index) {

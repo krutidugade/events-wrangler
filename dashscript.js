@@ -31,8 +31,10 @@ function render() {
 
     li.innerHTML = `
       <span id="event-${i}">${event}</span>
-      <button onclick="editEvent(${i})">✏️</button>
-      <button onclick="deleteEvent(${i})">❌</button>
+      <span id="actions-${i}">
+        <button onclick="editEvent(${i})">✏️</button>
+        <button onclick="deleteEvent(${i})">❌</button>
+        </span>
     `;
 
     list.appendChild(li);
@@ -53,12 +55,15 @@ function addEvent() {
 
 function editEvent(index) {
   const span = document.getElementById(`event-${index}`);
+  const actions = document.getElementById(`actions-${index}`);
 
   span.innerHTML = `
     <input
       id="edit-${index}"
       value="${events[index]}"
     />
+  `;
+  actions.innerHTML = `
     <button onclick="saveEdit(${index})">Save</button>
     <button onclick="render()">Cancel</button>
   `;

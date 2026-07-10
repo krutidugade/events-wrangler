@@ -2,90 +2,92 @@ const token = localStorage.getItem("token");
 
 // if not logged in → go back
 if (!token) {
-  window.location.href = "index.html";
+    window.location.href = "index.html";
 }
 
 // decode token (just for display)
 const payload = JSON.parse(atob(token.split('.')[1]));
 
 document.getElementById("user").innerHTML =
-  "Hello " + payload.name + "<br>" + payload.email;
+    "Hello " + payload.name + "<br>" + payload.email;
 
 function logout() {
-  localStorage.removeItem("token");
-  window.location.href = "index.html";
+    localStorage.removeItem("token");
+    window.location.href = "index.html";
 }
 
 let events = JSON.parse(localStorage.getItem("events")) || [];
 
 function saveDB() {
-  localStorage.setItem("events", JSON.stringify(events));
+    localStorage.setItem("events", JSON.stringify(events));
 }
 
 function render() {
-  const list = document.getElementById("list");
-  list.innerHTML = "";
+    const list = document.getElementById("list");
+    list.innerHTML = "";
 
-  events.forEach((event, i) => {
-    const li = document.createElement("li");
+    events.forEach((event, i) => {
+        const li = document.createElement("li");
 
-    li.innerHTML = `
-      <span id="event-${i}">${event}</span>
-      <span id="actions-${i}">
+        li.innerHTML = `
+    <span id="event-${i}">
+        <a href="event.html?id=${i}">${event}</a>
+    </span>
+    <span id="actions-${i}">
         <button onclick="editEvent(${i})">✏️</button>
         <button onclick="deleteEvent(${i})">❌</button>
-        </span>
+    </span>
     `;
 
-    list.appendChild(li);
-  });
+        list.appendChild(li);
+    });
 }
 
 function addEvent() {
-  const name = document.getElementById("name").value;
-  if (!name) return;
+    const name = document.getElementById("name").value;
+    if (!name) return;
 
-  events.push(name);
+    events.push(name);
 
-  saveDB();
-  render();
+    saveDB();
+    render();
 
-  document.getElementById("name").value = "";
+    document.getElementById("name").value = "";
 }
 
 function editEvent(index) {
-  const span = document.getElementById(`event-${index}`);
-  const actions = document.getElementById(`actions-${index}`);
+    const span = document.getElementById(`event-${index}`);
+    const actions = document.getElementById(`actions-${index}`);
 
-  span.innerHTML = `
+    span.innerHTML = `
     <input
       id="edit-${index}"
       value="${events[index]}"
     />
   `;
-  actions.innerHTML = `
+    actions.innerHTML = `
     <button onclick="saveEdit(${index})">Save</button>
     <button onclick="render()">Cancel</button>
   `;
 }
 
 function saveEdit(index) {
-  const input = document.getElementById(`edit-${index}`);
-  const newName = input.value.trim();
+    const input = document.getElementById(`edit-${index}`);
+    const newName = input.value.trim();
 
-  if (!newName) return;
+    if (!newName) return;
 
-  events[index] = newName;
+    events[index] = newName;
 
-  saveDB();
-  render();
+    saveDB();
+    render();
 }
 
 function deleteEvent(index) {
-  events.splice(index, 1);
+    events.splice(index, 1);
 
-  saveDB();
-  render();
+    saveDB();
+    render();
 }
 
 render();
